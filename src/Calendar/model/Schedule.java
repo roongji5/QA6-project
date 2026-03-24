@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 public class Schedule {
     private int id;
+    private String userId;
     private String title;
     private LocalDate date;
     private LocalTime startTime;
@@ -12,8 +13,9 @@ public class Schedule {
     private String description;
     private boolean completed;
 
-    public Schedule(int id, String title, LocalDate date, LocalTime startTime, LocalTime endTime, String description) {
+    public Schedule(int id, String userId, String title, LocalDate date, LocalTime startTime, LocalTime endTime, String description) {
         this.id = id;
+        this.userId = userId;
         this.title = title;
         this.date = date;
         this.startTime = startTime;
@@ -23,6 +25,7 @@ public class Schedule {
     }
 //getters
     public int getId() { return id; }
+    public String getUserId() { return userId; }
     public String getTitle() { return title; }
     public LocalDate getDate() { return date; }
     public LocalTime getStartTime() { return startTime; }
@@ -39,5 +42,8 @@ public class Schedule {
 
 
     @Override
-    public String toString() {return Schedule;}
+    public String toString() {
+        String status = completed ? "[완료]" : "[ ]";
+        return status + " " + title + " | " + date + " " + startTime + "~" + endTime;
+    }
 }

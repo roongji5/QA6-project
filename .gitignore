@@ -29,7 +29,6 @@ bin/
 .vscode/
 
 ### Build outputs ###
-*.class
 target/
 
 ### OS ###
