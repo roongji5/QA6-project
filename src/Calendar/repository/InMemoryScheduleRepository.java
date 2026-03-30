@@ -44,6 +44,24 @@ public class InMemoryScheduleRepository implements ScheduleRepository {
         return Collections.unmodifiableList(schedules);
     }
 
+    //findById는 없으면 null 반환, findByUserId는 해당 유저의 일정 리스트 반환
+    @Override
+    public Schedule findById(int id) {
+        for (Schedule s : schedules) {
+            if (s.getId() == id) return s;
+        }
+        return null;
+    }
+
+    @Override
+    public List<Schedule> findByUserId(String userId) {
+        List<Schedule> result = new ArrayList<>();
+        for (Schedule s : schedules) {
+            if (s.getUserId().equals(userId)) result.add(s);
+        }
+        return Collections.unmodifiableList(result);
+    }
+
     // 존재하지 않는 id 삭제 시 예외 발생
     @Override
     public void delete(int id) {

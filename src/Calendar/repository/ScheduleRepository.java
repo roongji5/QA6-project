@@ -5,6 +5,9 @@ import java.util.List;
 
 public interface ScheduleRepository {
     void addSchedule(Schedule schedule);
+    //실패시 예외 발생 - void
     List<Schedule> getSchedules();
+    Schedule findById(int id);
+    List<Schedule> findByUserId(String userId);
     void delete(int id);
 }
