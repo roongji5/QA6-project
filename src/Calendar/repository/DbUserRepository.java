@@ -7,8 +7,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * {@link UserRepository}의 SQLite 구현체.
+ * <p>
+ * {@link DatabaseManager}를 통해 커넥션을 획득하고,
+ * {@code users} 테이블을 대상으로 CRUD 작업을 수행한다.
+ * </p>
+ */
 public class DbUserRepository implements UserRepository {
 
+    /**
+     * 새 유저를 DB에 저장한다.
+     * <p>
+     * 입력값 유효성을 검사한 뒤 {@code users} 테이블에 INSERT한다.
+     * id가 중복되면 UNIQUE 제약 위반 메시지를 감지해 {@link IllegalArgumentException}으로 변환한다.
+     * </p>
+     *
+     * @param user 저장할 유저 (null 불가, id·password 필수)
+     * @throws IllegalArgumentException 유효성 검사 실패 또는 id 중복 시
+     * @throws RuntimeException         DB 저장 실패 시
+     */
     @Override
     public void addUser(User user) {
         if (user == null) throw new IllegalArgumentException("유저가 null일 수 없습니다.");
@@ -30,6 +48,13 @@ public class DbUserRepository implements UserRepository {
         }
     }
 
+    /**
+     * ID로 단일 유저를 조회한다.
+     *
+     * @param id 조회할 유저 ID
+     * @return 해당 유저, 없으면 {@code null}
+     * @throws RuntimeException DB 조회 실패 시
+     */
     @Override
     public User findById(String id) {
         String sql = "SELECT * FROM users WHERE id = ?";
@@ -44,6 +69,12 @@ public class DbUserRepository implements UserRepository {
         }
     }
 
+    /**
+     * 전체 유저 목록을 조회한다.
+     *
+     * @return 모든 유저의 불변 리스트 (없으면 빈 리스트)
+     * @throws RuntimeException DB 조회 실패 시
+     */
     @Override
     public List<User> findAll() {
         String sql = "SELECT * FROM users";
@@ -58,6 +89,13 @@ public class DbUserRepository implements UserRepository {
         }
     }
 
+    /**
+     * ID에 해당하는 유저를 삭제한다.
+     *
+     * @param id 삭제할 유저 ID
+     * @throws IllegalArgumentException 해당 ID의 유저가 존재하지 않는 경우
+     * @throws RuntimeException         DB 삭제 실패 시
+     */
     @Override
     public void delete(String id) {
         String sql = "DELETE FROM users WHERE id = ?";
@@ -73,6 +111,13 @@ public class DbUserRepository implements UserRepository {
         }
     }
 
+    /**
+     * {@link ResultSet}의 현재 행을 {@link User} 객체로 변환한다.
+     *
+     * @param rs 커서가 유효한 행을 가리키는 ResultSet
+     * @return 변환된 {@link User} 객체
+     * @throws SQLException 컬럼 접근 실패 시
+     */
     private User mapUser(ResultSet rs) throws SQLException {
         return new User(
                 rs.getString("id"),
