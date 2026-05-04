@@ -1,27 +1,35 @@
 package Calendar.model;
 
 public class User {
-    private String id;
+    private long userID;
+    private String loginID;
     private String password;
     private String name;
 
-    public User(String id, String password, String name) {
-        this.id = id;
+    public User(String loginID, String password, String name) {
+        this.userID = 0;
+        this.loginID = loginID;
         this.password = password;
         this.name = name;
     }
 
-    // getters
-    public String getId() { return id; }
+    public User(long userID, String loginID, String password, String name) {
+        this.userID = userID;
+        this.loginID = loginID;
+        this.password = password;
+        this.name = name;
+    }
+
+    public long getUserID() { return userID; }
+    public String getLoginID() { return loginID; }
     public String getPassword() { return password; }
     public String getName() { return name; }
 
-    // setters
     public void setPassword(String password) { this.password = password; }
     public void setName(String name) { this.name = name; }
 
     @Override
     public String toString() {
-        return "[" + id + "] " + name;
+        return "[" + loginID + "] " + name;
     }
 }

@@ -8,6 +8,6 @@ public interface ScheduleRepository {
     //실패시 예외 발생 - void
     List<Schedule> getSchedules();
     Schedule findById(int id);
-    List<Schedule> findByUserId(String userId);
+    List<Schedule> findByUserId(long userId);
     void delete(int id);
 }

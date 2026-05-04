@@ -31,6 +31,7 @@ public class DbScheduleRepository implements ScheduleRepository {
     @Override
     public void addSchedule(Schedule schedule) {
         if (schedule == null) throw new IllegalArgumentException("일정이 null일 수 없습니다.");
+        if (schedule.getUserId() <= 0) throw new IllegalArgumentException("유효한 사용자 id가 필요합니다.");
         if (schedule.getTitle() == null || schedule.getTitle().isBlank()) throw new IllegalArgumentException("일정 제목은 필수입니다.");
         if (schedule.getDate() == null) throw new IllegalArgumentException("일정 날짜는 필수입니다.");
         if (schedule.getStartTime() != null && schedule.getEndTime() != null
@@ -41,7 +42,7 @@ public class DbScheduleRepository implements ScheduleRepository {
         String sql = "INSERT INTO schedules (user_id, title, date, start_time, end_time, description, completed) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, schedule.getUserId());
+            pstmt.setLong(1, schedule.getUserId());
             pstmt.setString(2, schedule.getTitle());
             pstmt.setString(3, schedule.getDate().toString());
             pstmt.setString(4, schedule.getStartTime() != null ? schedule.getStartTime().toString() : null);
@@ -103,12 +104,12 @@ public class DbScheduleRepository implements ScheduleRepository {
      * @throws RuntimeException DB 조회 실패 시
      */
     @Override
-    public List<Schedule> findByUserId(String userId) {
+    public List<Schedule> findByUserId(long userId) {
         String sql = "SELECT * FROM schedules WHERE user_id = ?";
         List<Schedule> list = new ArrayList<>();
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, userId);
+            pstmt.setLong(1, userId);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) list.add(mapSchedule(rs));
             return Collections.unmodifiableList(list);
@@ -151,7 +152,7 @@ public class DbScheduleRepository implements ScheduleRepository {
         String endTimeStr = rs.getString("end_time");
         Schedule schedule = new Schedule(
                 rs.getInt("id"),
-                rs.getString("user_id"),
+                rs.getLong("user_id"),
                 rs.getString("title"),
                 LocalDate.parse(rs.getString("date")),
                 startTimeStr != null ? LocalTime.parse(startTimeStr) : null,
