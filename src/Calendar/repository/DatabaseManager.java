@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -30,6 +31,7 @@ public class DatabaseManager {
     public static void initialize() {
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
             executeSqlScript(stmt, CREATE_TABLES_SQL);
+            ensureUsersJobColumn(stmt);
         } catch (SQLException | IOException e) {
             throw new RuntimeException("DB 초기화 실패", e);
         }
@@ -50,6 +52,23 @@ public class DatabaseManager {
             if (!trimmedSql.isEmpty()) {
                 stmt.execute(trimmedSql);
             }
+        }
+    }
+
+    private static void ensureUsersJobColumn(Statement stmt) throws SQLException {
+        if (!hasColumn(stmt, "users", "job")) {
+            stmt.execute("ALTER TABLE users ADD COLUMN job TEXT");
+        }
+    }
+
+    private static boolean hasColumn(Statement stmt, String tableName, String columnName) throws SQLException {
+        try (ResultSet rs = stmt.executeQuery("PRAGMA table_info(" + tableName + ")")) {
+            while (rs.next()) {
+                if (columnName.equals(rs.getString("name"))) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

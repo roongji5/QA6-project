@@ -19,7 +19,7 @@ public class TestMain {
         DbScheduleRepository scheduleRepo = new DbScheduleRepository();
 
         // 유저 저장
-        User user = new User("test1", "pw1234", "홍길동");
+        User user = new User("test1", "pw1234", "홍길동", "개발자");
         userRepo.addUser(user);
         User savedUser = userRepo.findByLoginId("test1");
         System.out.println("유저 저장: " + savedUser);

@@ -69,7 +69,8 @@ CREATE TABLE users (
     id       INTEGER PRIMARY KEY AUTOINCREMENT,
     login_id TEXT    NOT NULL UNIQUE,
     password TEXT    NOT NULL,
-    name     TEXT    NOT NULL
+    name     TEXT    NOT NULL,
+    job      TEXT
 );
 
 CREATE TABLE schedules (
@@ -93,16 +94,14 @@ CREATE TABLE schedules (
 2. `lib/sqlite-jdbc-3.51.3.0.jar`가 라이브러리로 등록되어 있는지 확인합니다.
 3. `src/Calendar/app/TestMain.java`를 실행합니다.
 
-## 현재 확인된 문제
+## DB 초기화 참고
 
-- 로컬 `calendar.db`의 테이블 구조와 현재 Java 코드의 테이블 구조가 다릅니다.
-  - 기존 DB 파일을 그대로 사용할 경우 SQL 오류가 발생할 수 있습니다.
-- SQLite의 `CREATE TABLE IF NOT EXISTS`는 이미 만들어진 테이블 구조를 자동으로 바꾸지 않습니다.
-  - 기존 DB를 계속 사용할 경우 마이그레이션이 필요합니다.
+- `DatabaseManager.initialize()`는 테이블 생성 후 기존 `users` 테이블에 `job` 컬럼이 없으면 자동으로 추가합니다.
+- SQLite의 `CREATE TABLE IF NOT EXISTS`는 이미 만들어진 테이블 구조를 자동으로 바꾸지 않으므로, 이후 큰 스키마 변경에는 별도 마이그레이션 관리가 필요합니다.
 
 ## 다음 작업 후보
 
-1. 기존 `calendar.db` 마이그레이션 또는 재생성
+1. DB 마이그레이션 관리 체계 도입
 2. Gradle 또는 Maven 도입
 3. 테스트 코드 추가
 4. Service 계층과 UI 계층 구현

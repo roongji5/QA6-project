@@ -16,12 +16,13 @@ public class DbUserRepository implements UserRepository {
         if (user.getPassword() == null || user.getPassword().isBlank()) throw new IllegalArgumentException("password는 필수입니다.");
         if (user.getName() == null || user.getName().isBlank()) throw new IllegalArgumentException("name은 필수입니다.");
 
-        String sql = "INSERT INTO users (login_id, password, name) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO users (login_id, password, name, job) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getLoginID());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getName());
+            pstmt.setString(4, user.getJob());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("유저 저장 실패", e);
@@ -72,13 +73,14 @@ public class DbUserRepository implements UserRepository {
 
     @Override
     public void update(User user) {
-        String sql = "UPDATE users SET login_id = ?, password = ?, name = ? WHERE id = ?";
+        String sql = "UPDATE users SET login_id = ?, password = ?, name = ?, job = ? WHERE id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getLoginID());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getName());
-            pstmt.setLong(4, user.getUserID());
+            pstmt.setString(4, user.getJob());
+            pstmt.setLong(5, user.getUserID());
             int affected = pstmt.executeUpdate();
             if (affected == 0) throw new IllegalArgumentException("존재하지 않는 사용자입니다. id: " + user.getUserID());
         } catch (IllegalArgumentException e) {
@@ -108,7 +110,8 @@ public class DbUserRepository implements UserRepository {
                 rs.getLong("id"),
                 rs.getString("login_id"),
                 rs.getString("password"),
-                rs.getString("name")
+                rs.getString("name"),
+                rs.getString("job")
         );
     }
 }
