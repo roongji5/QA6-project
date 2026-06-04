@@ -9,10 +9,9 @@ Java와 SQLite를 사용한 간단한 캘린더 일정 관리 프로젝트입니
 
 ## 기술 스택
 
-- Java
+- Java 21
 - SQLite
 - JDBC
-- IntelliJ IDEA
 
 ## 프로젝트 구조
 

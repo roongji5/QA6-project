@@ -31,6 +31,10 @@ bin/
 ### Build outputs ###
 target/
 
+### Local database files ###
+*.db
+*.sqlite
+
 ### OS ###
 .DS_Store
 Thumbs.db
