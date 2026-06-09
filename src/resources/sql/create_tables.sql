@@ -7,13 +7,13 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS schedules (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id     INTEGER NOT NULL,
-    title       TEXT    NOT NULL,
-    date        TEXT    NOT NULL,
-    start_time  TEXT,
-    end_time    TEXT,
-    description TEXT,
-    completed   INTEGER NOT NULL DEFAULT 0 CHECK (completed IN (0, 1)),
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id        INTEGER NOT NULL,
+    title          TEXT    NOT NULL,
+    start_datetime TEXT    NOT NULL,
+    end_datetime   TEXT    NOT NULL,
+    description    TEXT,
+    color_hex      TEXT    NOT NULL DEFAULT '#5470E0',
+    completed      INTEGER NOT NULL DEFAULT 0 CHECK (completed IN (0, 1)),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

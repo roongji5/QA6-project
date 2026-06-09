@@ -42,6 +42,7 @@ public class UserInfoDialog extends JDialog {
         setMinimumSize(new Dimension(460, 320));
         setLocationRelativeTo(owner);
         setContentPane(createContent());
+        DialogShortcuts.installCloseShortcut(this);
     }
 
     private JPanel createContent() {
@@ -90,6 +91,7 @@ public class UserInfoDialog extends JDialog {
         JButton updateButton = new JButton("Update");
         updateButton.setEnabled(currentUser != null);
         updateButton.addActionListener(event -> updateUserInfo());
+        getRootPane().setDefaultButton(updateButton);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;

@@ -1,27 +1,33 @@
 package Calendar.model;
 
-import java.time.LocalTime;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Schedule {
+    public static final String DEFAULT_COLOR_HEX = "#5470E0";
+
     private int id;
     private long userId;
     private String title;
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
     private String description;
+    private String colorHex;
     private boolean completed;
 
-    public Schedule(int id, long userId, String title, LocalDate date, LocalTime startTime, LocalTime endTime,
+    public Schedule(int id, long userId, String title, LocalDateTime startDateTime, LocalDateTime endDateTime,
             String description) {
+        this(id, userId, title, startDateTime, endDateTime, description, DEFAULT_COLOR_HEX);
+    }
+
+    public Schedule(int id, long userId, String title, LocalDateTime startDateTime, LocalDateTime endDateTime,
+            String description, String colorHex) {
         this.id = id;
         this.userId = userId;
         this.title = title;
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
         this.description = description;
+        this.colorHex = colorHex == null || colorHex.isBlank() ? DEFAULT_COLOR_HEX : colorHex;
         this.completed = false;
     }
 
@@ -38,20 +44,20 @@ public class Schedule {
         return title;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
     public String getDescription() {
         return description;
+    }
+
+    public String getColorHex() {
+        return colorHex;
     }
 
     public boolean isCompleted() {
@@ -63,20 +69,20 @@ public class Schedule {
         this.title = title;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setColorHex(String colorHex) {
+        this.colorHex = colorHex == null || colorHex.isBlank() ? DEFAULT_COLOR_HEX : colorHex;
     }
 
     public void setCompleted(boolean completed) {
@@ -86,6 +92,6 @@ public class Schedule {
     @Override
     public String toString() {
         String status = completed ? "[완료]" : "[ ]";
-        return status + " " + title + " | " + date + " " + startTime + "~" + endTime;
+        return status + " " + title + " | " + startDateTime + "~" + endDateTime;
     }
 }

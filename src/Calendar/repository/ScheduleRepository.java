@@ -9,5 +9,6 @@ public interface ScheduleRepository {
     List<Schedule> getSchedules();
     Schedule findById(int id);
     List<Schedule> findByUserId(long userId);
+    void update(Schedule schedule);
     void delete(int id);
 }
