@@ -75,9 +75,6 @@ public class UserInfoDialog extends JDialog {
     private void fillCurrentUserValues() {
         passwordField.setText(currentUser.getPassword());
         nameField.setText(currentUser.getName());
-
-        // 직업 목록은 기본 후보를 제공하되, 나중에 새 직업을 직접 입력할 수 있게 열어둔다.
-        jobComboBox.setEditable(true);
         jobComboBox.setSelectedItem(currentUser.getJob() == null ? "" : currentUser.getJob());
     }
 
@@ -110,7 +107,7 @@ public class UserInfoDialog extends JDialog {
         String password = new String(passwordChars);
         Arrays.fill(passwordChars, '\0');
         String name = nameField.getText().trim();
-        Object selectedJob = jobComboBox.getEditor().getItem();
+        Object selectedJob = jobComboBox.getSelectedItem();
         String job = selectedJob == null ? "" : selectedJob.toString().trim();
 
         if (password.isBlank() || name.isBlank()) {

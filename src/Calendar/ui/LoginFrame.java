@@ -6,6 +6,7 @@ import Calendar.session.UserSession;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,6 +29,7 @@ public class LoginFrame extends JFrame {
 
     private static final double MAIN_WINDOW_RATIO = 0.3;
     private static final Dimension MIN_LOGIN_SIZE = new Dimension(420, 320);
+    private static final String[] JOB_OPTIONS = {"", "admin", "학생", "회사원", "자영업자", "기타"};
 
     private final UserRepository userRepository;
     private final Supplier<JFrame> calendarFrameFactory;
@@ -39,7 +41,7 @@ public class LoginFrame extends JFrame {
     private final JTextField signUpLoginIdField = new JTextField(18);
     private final JPasswordField signUpPasswordField = new JPasswordField(18);
     private final JTextField signUpNameField = new JTextField(18);
-    private final JTextField signUpJobField = new JTextField(18);
+    private final JComboBox<String> signUpJobComboBox = new JComboBox<>(JOB_OPTIONS);
     private final JButton loginButton = createLoginButton();
     private final JButton signUpSubmitButton = createSignUpSubmitButton();
 
@@ -143,7 +145,7 @@ public class LoginFrame extends JFrame {
         addFormRow(formPanel, 0, "Login ID", signUpLoginIdField);
         addFormRow(formPanel, 1, "Password", signUpPasswordField);
         addFormRow(formPanel, 2, "Name", signUpNameField);
-        addFormRow(formPanel, 3, "Job", signUpJobField);
+        addFormRow(formPanel, 3, "Job", signUpJobComboBox);
 
         panel.add(formPanel, BorderLayout.CENTER);
 
@@ -166,7 +168,7 @@ public class LoginFrame extends JFrame {
         return panel;
     }
 
-    private void addFormRow(JPanel formPanel, int row, String label, JTextField field) {
+    private void addFormRow(JPanel formPanel, int row, String label, java.awt.Component input) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 0, 8, 0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -177,7 +179,7 @@ public class LoginFrame extends JFrame {
         gbc.gridx = 1;
         gbc.weightx = 1;
         gbc.insets = new Insets(8, 12, 8, 0);
-        formPanel.add(field, gbc);
+        formPanel.add(input, gbc);
     }
 
     private JButton createLoginButton() {
@@ -233,7 +235,8 @@ public class LoginFrame extends JFrame {
         String password = new String(passwordChars);
         Arrays.fill(passwordChars, '\0');
         String name = signUpNameField.getText().trim();
-        String job = signUpJobField.getText().trim();
+        Object selectedJob = signUpJobComboBox.getSelectedItem();
+        String job = selectedJob == null ? "" : selectedJob.toString().trim();
 
         if (loginId.isBlank() || password.isBlank() || name.isBlank()) {
             showSignUpError("Login ID, Password, Name은 필수입니다.");
@@ -272,7 +275,7 @@ public class LoginFrame extends JFrame {
         signUpLoginIdField.setText("");
         signUpPasswordField.setText("");
         signUpNameField.setText("");
-        signUpJobField.setText("");
+        signUpJobComboBox.setSelectedIndex(0);
     }
 
     private void openCalendarApp() {
