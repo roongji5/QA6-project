@@ -3,7 +3,7 @@
 Calendar schedule management project built with Java Swing and SQLite.
 
 ## Team Members
-
+- 주지훈
 - 공수민
 - 백지환
 
